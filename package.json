@@ -1,0 +1,14 @@
+{
+  "name": "etgereum",
+  "version": "1.0.0",
+  "description": "eTGereum Blockchain",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roy Noone",
+  "license": "MIT",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
+}
