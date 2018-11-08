@@ -40,7 +40,7 @@ class Blockchain {
     this.xofValue = 500.67;
   }
   createGenesisBlock(){
-    var genesisBlock = new Block("Genesis Transaction", "0");
+    var genesisBlock = new Block(new Transaction("eTGereum", "doe", 20000), "0");
     genesisBlock.calculateHash();
     this.chain.push(genesisBlock);
     console.log(genesisBlock)
