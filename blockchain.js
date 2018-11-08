@@ -49,17 +49,26 @@ class Blockchain {
     this.pendingTransacttions.push(trx);
   }
   startMining(minerAddress){
-    this.pendingTransacttions.forEach((trx, index) =>{
+      if(this.pendingTransacttions.length==0){
+        return;
+      }
+      var trx = this.pendingTransacttions[0];
       if(trx.fromAddress!="eTGereum"){
             trx.applyFees(this.getFeesPercentage());
       }
       var block = new Block(trx, this.chain[this.chain.length - 1].hash);
-      block.mineBlock(this.difficulty);
+      if(trx.fromAddress=="eTGereum"){
+        block.mineBlock(this.difficulty/2);
+      }else{
+        block.mineBlock(this.difficulty);
+      }
       this.chain.push(block);
+      console.log("\n"+JSON.stringify(block, true, 4)+"\n")
+      this.pendingTransacttions = this.pendingTransacttions.slice(1);
       if(trx.fromAddress!="eTGereum"){
             this.pendingTransacttions.unshift(new Transaction("eTGereum",minerAddress, trx.fees));
       }
-    })
+      this.startMining(minerAddress);
   }
   getBalance(address){
     var balance = 0;
@@ -68,12 +77,17 @@ class Blockchain {
         balance+= block.transaction.amount;
       }else if(block.transaction.fromAddress==address){
         balance-= block.transaction.amount;
+        balance-= block.transaction.fees;
       }
     });
     return balance;
   }
   getFeesPercentage(){
+    console.log(0.1 * 17/this.xofValue)
     return 0.1 * 17/this.xofValue;
+  }
+  getBlocks(){
+    return this.chain;
   }
 }
 
