@@ -48,12 +48,17 @@ class Blockchain {
   createTransaction(trx){
     this.pendingTransacttions.push(trx);
   }
-  startMining(){
+  startMining(minerAddress){
     this.pendingTransacttions.forEach((trx, index) =>{
-      trx.applyFees(this.getFeesPercentage());
+      if(trx.fromAddress!="eTGereum"){
+            trx.applyFees(this.getFeesPercentage());
+      }
       var block = new Block(trx, this.chain[this.chain.length - 1].hash);
       block.mineBlock(this.difficulty);
       this.chain.push(block);
+      if(trx.fromAddress!="eTGereum"){
+            this.pendingTransacttions.unshift(new Transaction("eTGereum",minerAddress, trx.fees));
+      }
     })
   }
   getBalance(address){
